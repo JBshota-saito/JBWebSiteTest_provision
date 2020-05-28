@@ -1,40 +1,37 @@
 <?php
- 
-$base_url = 'https://api.sendgrid.com/api/mail.send.json';
- 
-function assertion($condition, $reason) {
-  if (!$condition) die(json_encode(array(
-    'message' => 'error',
-    'reason' => $reason
-  )));
-}
- 
-header('Content-Type: application/json');
- 
-$content = $_GET['content'] or '';
-assertion(!empty($content), 'Content is null.');
- 
-$payloads = array(
-  'api_user' => 'azure_8d7c17769c070674e7f7a53650331d0a@azure.com',
-  'api_key' => 'P@ssw0rd',
-  'from' => 'elsartshe@yahoo.co.jp',
-  'to' => 'elsartshe@yahoo.co.jp',
-  'subject' => '‚¨–â‡‚¹ƒ[ƒ‹',
-  'text' => $content
-);
- 
-$curl = curl_init($base_url);
-curl_setopt($curl, CURLOPT_SSL_VERIFYPEER, false);
-curl_setopt($curl, CURLOPT_SSL_VERIFYHOST, false);
-curl_setopt($curl, CURLOPT_POST, true);
-curl_setopt($curl, CURLOPT_POSTFIELDS, http_build_query($payloads));
-curl_setopt($curl, CURLOPT_RETURNTRANSFER, true);
- 
-$response = curl_exec($curl);
-assertion($response !== false, 'Something went wrong.');
- 
-curl_close($curl);
- 
-echo $response;
- 
-?>
+
+ $url = 'https://api.sendgrid.com/';
+ $user = 'test saito';
+ $pass = 'P@ssw0rd';
+
+ $params = array(
+      'api_user' => $user,
+      'api_key' => $pass,
+      'to' => 'elsartshe@yahoo.co.jp',
+      'subject' => 'testing from curl',
+      'html' => 'testing body',
+      'text' => 'testing body',
+      'from' => 'elsartshe@yahoo.co.jp',
+   );
+
+ $request = $url.'api/mail.send.json';
+
+ // Generate curl request
+ $session = curl_init($request);
+
+ // Tell curl to use HTTP POST
+ curl_setopt ($session, CURLOPT_POST, true);
+
+ // Tell curl that this is the body of the POST
+ curl_setopt ($session, CURLOPT_POSTFIELDS, $params);
+
+ // Tell curl not to return headers, but do return the response
+ curl_setopt($session, CURLOPT_HEADER, false);
+ curl_setopt($session, CURLOPT_RETURNTRANSFER, true);
+
+ // obtain response
+ $response = curl_exec($session);
+ curl_close($session);
+
+ // print everything out
+ print_r($response);

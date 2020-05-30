@@ -63,12 +63,6 @@
                 }
 
             }
-        
-            if (scrollTop > 0) {
-                $(this).addClass(ClassName.SHORT);
-            } else {
-                $(this).removeClass(ClassName.SHORT);
-            }
 
         });
 
